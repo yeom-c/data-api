@@ -1,0 +1,42 @@
+name: main-deploy-actions
+on:
+  push:
+    branches:
+      - main
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Source checkout
+        uses: actions/checkout@v3
+
+      - name: Create env file
+        run: |
+          touch .env
+          echo "${{ secrets.APP_ENV }}" >> .env
+          cat .env
+
+      - name: Generate deployment package
+        run: zip -r deploy.zip . -x '*.git*'
+
+      - name: Deploy to elastic beanstalk
+        uses: einaregilsson/beanstalk-deploy@v20
+        with:
+          aws_access_key: ${{secrets.AWS_BACKEND_DEPLOY_ACCESS_KEY_ID}}
+          aws_secret_key: ${{secrets.AWS_BACKEND_DEPLOY_SECRET_ACCESS_KEY}}
+          application_name: data-api
+          environment_name: data-api-env
+          version_label: main-${{github.SHA}}
+          region: ${{ secrets.AWS_BACKEND_DEPLOY_REGION }}
+          deployment_package: deploy.zip
+          use_existing_version_if_available: true
+
+      - name: Notify to slack
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          author_name: Data Api (http://data-api.quasar-gamestudio.ga/health)
+          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        if: always()

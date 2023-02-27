@@ -1,0 +1,19 @@
+DB_URL=mysql://유저:비밀번호@tcp(연결호스트:포트번호)/데이터베이스명?parseTime=true
+
+migrate.create:
+	@read -p "Enter Migration Name: (ex: create_table, add_cloumn) " name ;\
+		migrate create -ext sql -dir database/migration -seq $$name ;\
+
+migrate.up:
+	@read -p "적용 단계 입력(미입력시 전체 적용): " step ;\
+		migrate -source file:./database/migration -database "${DB_URL}" up $$step ;\
+
+migrate.down:
+	@read -p "롤백 단계 입력(미입력시 전체 롤백): " step ;\
+		migrate -source file:./database/migration -database "${DB_URL}" down $$step ;\
+
+migrate.force:
+	@read -p "강제할 버전 입력(미입력 하면 안됨): " step; \
+		migrate -source file:./database/migration -database "${DB_URL}" force $$step ;\
+
+.PHONY: migrate.create migrate.up migrate.down migrate.force
