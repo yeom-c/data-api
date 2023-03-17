@@ -2,7 +2,7 @@
 
 ### 소개
 
-> Quasar Data API 는 데이터툴 서비스에 필요한 API 를 제공합니다.
+> Data API 는 데이터툴 서비스에 필요한 API 를 제공합니다.
 
 - [Go](https://go.dev)
 - [Fiber](https://gofiber.io)
