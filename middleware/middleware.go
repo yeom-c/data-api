@@ -11,7 +11,7 @@ func SetMiddleware() {
 	app.Server().Fiber.Use(recover.New())
 	app.Server().Fiber.Use(logger.New())
 	app.Server().Fiber.Use(cors.New(cors.Config{
-		AllowOrigins:     app.Config().CorsHost,
+		AllowOrigins:     "https://data.quasar-gamestudio.ga, https://d10g6dsqcueu6j.cloudfront.net",
 		AllowCredentials: true,
 	}))
 }
