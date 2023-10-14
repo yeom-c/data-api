@@ -57,7 +57,7 @@ go mod download
 
 # 실행
 go run application.go
-# or air 가 설치되어 있다면
+# or air 가 설치되어 있다면 air 로 실행
 air
 ```
 
