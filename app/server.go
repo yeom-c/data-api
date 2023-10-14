@@ -2,9 +2,10 @@ package app
 
 import (
 	"fmt"
+	"sync"
+
 	"github.com/goccy/go-json"
 	"github.com/gofiber/fiber/v2"
-	"sync"
 )
 
 type server struct {
@@ -22,6 +23,7 @@ func Server() *server {
 			instance.Fiber = fiber.New(fiber.Config{
 				JSONEncoder: json.Marshal,
 				JSONDecoder: json.Unmarshal,
+				BodyLimit:   50 * 1024 * 1024, // 50MB
 			})
 		}
 	})
